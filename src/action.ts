@@ -53,40 +53,8 @@ function resolve(input: string): string[] {
 
 export async function run(): Promise<void> {
   try {
-    const paths = resolve(
-      core.getInput('files', {required: false}) ||
-        core.getInput('file', {required: true})
-    )
-
-    const args = core.getInput('args')
-    const strip = core.getInput('strip') || 'true'
-    const strip_args = core.getInput('strip_args')
-
-    if (!paths || paths.length == 0) {
-      core.error(`Path input: ${paths}`)
-      core.setFailed(`No files found.`)
-    }
-
-    if (/true/i.test(strip)) {
-      core.info('Running strip...')
-
-      for (const file of paths) {
-        const output = await exec.getExecOutput(`strip ${strip_args} ${file}`)
-        core.debug(output.stdout)
-        core.debug(output.stderr)
-      }
-    }
-
     core.info('Downloading UPX...')
-    const upx_path = await downloadUpx()
-
-    core.info('Running UPX...')
-
-    for (const file of paths) {
-      const output = await exec.getExecOutput(`${upx_path} ${args} ${file}`)
-      core.debug(output.stdout)
-      core.debug(output.stderr)
-    }
+    await downloadUpx()
   } catch (error: any) {
     core.setFailed(error.message)
     throw error
