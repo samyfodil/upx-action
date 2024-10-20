@@ -65,6 +65,8 @@ function downloadUpx() {
         }
         else if (os.type() == 'Darwin') {
             yield exec.exec(`brew install upx`);
+            const brewPath = '/opt/homebrew/bin:/usr/local/bin';
+            core.addPath(brewPath);
             return 'upx';
         }
         else if (os.type() == 'Windows_NT') {

@@ -30,6 +30,8 @@ async function downloadUpx(): Promise<string> {
     return `${tmpdir}/upx`
   } else if (os.type() == 'Darwin') {
     await exec.exec(`brew install upx`)
+    const brewPath = '/opt/homebrew/bin:/usr/local/bin'
+    core.addPath(brewPath)
     return 'upx'
   } else if (os.type() == 'Windows_NT') {
     await exec.exec(`choco install upx --no-progress --version=${upx_version}`)
