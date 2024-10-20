@@ -8,7 +8,8 @@ import * as path from 'path'
 async function downloadUpx(): Promise<string> {
   const upx_version = '4.2.2'
   const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'upx-action-'))
-  if (os.type() == 'Linux') {
+
+  if (os.type() === 'Linux') {
     await exec.exec(
       'curl',
       [
@@ -28,15 +29,25 @@ async function downloadUpx(): Promise<string> {
       {cwd: tmpdir}
     )
     return `${tmpdir}/upx`
-  } else if (os.type() == 'Darwin') {
+  } else if (os.type() === 'Darwin') {
     await exec.exec(`brew install upx`)
-    const brewPath = '/opt/homebrew/bin:/usr/local/bin'
-    core.addPath(brewPath)
+    let brewPrefix = ''
+    await exec.exec('brew --prefix', [], {
+      listeners: {
+        stdout: (data: Buffer) => {
+          brewPrefix += data.toString().trim()
+        }
+      }
+    })
+    const brewBinPath = path.join(brewPrefix, 'bin')
+    core.info(`UPX path is ${brewBinPath}`)
+    core.addPath(brewBinPath)
     return 'upx'
-  } else if (os.type() == 'Windows_NT') {
+  } else if (os.type() === 'Windows_NT') {
     await exec.exec(`choco install upx --no-progress --version=${upx_version}`)
     return 'upx'
   }
+
   throw 'unsupported OS'
 }
 

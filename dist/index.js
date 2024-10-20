@@ -50,7 +50,7 @@ function downloadUpx() {
     return __awaiter(this, void 0, void 0, function* () {
         const upx_version = '4.2.2';
         const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'upx-action-'));
-        if (os.type() == 'Linux') {
+        if (os.type() === 'Linux') {
             yield exec.exec('curl', [
                 '-LO',
                 `https://github.com/upx/upx/releases/download/v${upx_version}/upx-${upx_version}-amd64_linux.tar.xz`
@@ -63,13 +63,22 @@ function downloadUpx() {
             ], { cwd: tmpdir });
             return `${tmpdir}/upx`;
         }
-        else if (os.type() == 'Darwin') {
+        else if (os.type() === 'Darwin') {
             yield exec.exec(`brew install upx`);
-            const brewPath = '/opt/homebrew/bin:/usr/local/bin';
-            core.addPath(brewPath);
+            let brewPrefix = '';
+            yield exec.exec('brew --prefix', [], {
+                listeners: {
+                    stdout: (data) => {
+                        brewPrefix += data.toString().trim();
+                    }
+                }
+            });
+            const brewBinPath = path.join(brewPrefix, 'bin');
+            core.info(`UPX path is ${brewBinPath}`);
+            core.addPath(brewBinPath);
             return 'upx';
         }
-        else if (os.type() == 'Windows_NT') {
+        else if (os.type() === 'Windows_NT') {
             yield exec.exec(`choco install upx --no-progress --version=${upx_version}`);
             return 'upx';
         }
