@@ -2,7 +2,7 @@
   "name": "upx-action",
   "version": "1.0.0",
   "private": true,
-  "description": "Strip and run UPX on executables",
+  "description": "Installs UPX",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,7 +10,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "pack": "ncc build",
-    "test": "jest --testTimeout=60000",
+    "test": "jest --testTimeout=60000 --passWithNoTests",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {

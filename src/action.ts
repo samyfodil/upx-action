@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
-import * as glob from 'glob'
 // @ts-ignore
 import * as path from 'path'
 
