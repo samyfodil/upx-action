@@ -39,18 +39,6 @@ async function downloadUpx(): Promise<string> {
   throw 'unsupported OS'
 }
 
-function resolve(input: string): string[] {
-  return input
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(line => line)
-    .reduce((paths: string[], pattern: string): string[] => {
-      return paths.concat(
-        glob.sync(pattern).filter(next => fs.lstatSync(next).isFile())
-      )
-    }, [])
-}
-
 export async function run(): Promise<void> {
   try {
     core.info('Downloading UPX...')
