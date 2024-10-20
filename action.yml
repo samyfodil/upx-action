@@ -1,24 +1,9 @@
-name: 'Strip and run UPX on executables'
-description: 'Dramatically decreases size of executables by stripping them of debug symbols and running UPX on them'
-author: 'Sven-Hendrik Haase'
+name: 'Installs UPX'
+description: 'Dramatically decreases size of executables using UPX'
+author: 'Samy Fodil'
 branding:
   icon: file-minus
-  color: blue
-inputs:
-  file:
-    description: 'Local file to pack (deprecated, prefer `files`)'
-    required: true
-    deprecationMessage: 'Prefer "files" supporting globs instead of "file"'
-  files:
-    description: 'Newline separated globs to pack'
-    required: false
-  args:
-    description: 'Arguments to pass to UPX'
-  strip:
-    description: 'Whether or not "strip" symbols from object file'
-    default: 'true'
-  strip_args:
-    description: 'Arguments to pass to strip'
+  color: green
 runs:
   using: 'node20'
   main: 'dist/index.js'
